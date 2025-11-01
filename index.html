@@ -436,6 +436,24 @@
             line-height: 1.4;
         }
 
+        .error {
+            color: red;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid red;
+            margin: 10px 0;
+        }
+
+        .success {
+            color: green;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid green;
+            margin: 10px 0;
+        }
+
         /* Social Media Icons */
         .social-media {
             display: flex;
@@ -821,205 +839,6 @@
     </footer>
 
     <script>
-        // Complete student dataset
-        const studentDatabase = {
-            "7898156": {
-                admissionNumber: "7898156",
-                studentId: "JJUUGRE181556",
-                name: "Bie Chuol Koryom",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 4",
-                registrationDate: "October 23-24, 2025",
-                stream: "Natural Science",
-                dormBuilding: "Block-25",
-                dormRoom: "3",
-                dormBed: "1"
-            },
-            "7425675": {
-                admissionNumber: "7425675",
-                studentId: "JJUUGRE181557",
-                name: "Buay Tung Tuit Tuit",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 5",
-                registrationDate: "October 23-24, 2025",
-                stream: "Natural Science",
-                dormBuilding: "Block-25",
-                dormRoom: "3",
-                dormBed: "2"
-            },
-            "7425833": {
-                admissionNumber: "7425833",
-                studentId: "JJUUGRE181558",
-                name: "Nhial Gach Reat",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 5",
-                registrationDate: "October 23-24, 2025",
-                stream: "Natural Science",
-                dormBuilding: "Block-25",
-                dormRoom: "3",
-                dormBed: "3"
-            },
-            "7404371": {
-                admissionNumber: "7404371",
-                studentId: "JJUUGRE181559",
-                name: "Puok Joack Biliew",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 5",
-                registrationDate: "October 23-24, 2025",
-                stream: "Natural Science",
-                dormBuilding: "Block-25",
-                dormRoom: "3",
-                dormBed: "4"
-            },
-            "7126718": {
-                admissionNumber: "7126718",
-                studentId: "JJUUGRE181560",
-                name: "Abdi Ahmed Mohamed",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 4",
-                registrationDate: "October 23-24, 2025",
-                stream: "Natural Science",
-                dormBuilding: "Block-25",
-                dormRoom: "3",
-                dormBed: "5"
-            },
-            "6429160": {
-                admissionNumber: "6429160",
-                studentId: "JJUUGRE181561",
-                name: "Abdi Aliyi Umer",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 4",
-                registrationDate: "October 23-24, 2025",
-                stream: "Natural Science",
-                dormBuilding: "Block-25",
-                dormRoom: "3",
-                dormBed: "6"
-            },
-            "8475658": {
-                admissionNumber: "8475658",
-                studentId: "JJUUGRE181562",
-                name: "Abdi Farah Sirad",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 4",
-                registrationDate: "October 23-24, 2025",
-                stream: "Natural Science",
-                dormBuilding: "Block-25",
-                dormRoom: "4",
-                dormBed: "1"
-            },
-            "8475659": {
-                admissionNumber: "8475659",
-                studentId: "JJUUGRE181563",
-                name: "Amina Mohammed Hassan",
-                gender: "Female",
-                building: "Main Registrar",
-                roomORwindow: "Window 6",
-                registrationDate: "October 23-24, 2025",
-                stream: "Social Science",
-                dormBuilding: "Block-15",
-                dormRoom: "2",
-                dormBed: "1"
-            },
-            "8475660": {
-                admissionNumber: "8475660",
-                studentId: "JJUUGRE181564",
-                name: "Bilan Omar Ali",
-                gender: "Female",
-                building: "Main Registrar",
-                roomORwindow: "Window 6",
-                registrationDate: "October 23-24, 2025",
-                stream: "Social Science",
-                dormBuilding: "Block-15",
-                dormRoom: "2",
-                dormBed: "2"
-            },
-            "8475661": {
-                admissionNumber: "8475661",
-                studentId: "JJUUGRE181565",
-                name: "Fatuma Ahmed Abdi",
-                gender: "Female",
-                building: "Main Registrar",
-                roomORwindow: "Window 6",
-                registrationDate: "October 23-24, 2025",
-                stream: "Social Science",
-                dormBuilding: "Block-15",
-                dormRoom: "2",
-                dormBed: "3"
-            },
-            "8475662": {
-                admissionNumber: "8475662",
-                studentId: "JJUUGRE181566",
-                name: "Khadija Mohammed Ali",
-                gender: "Female",
-                building: "Main Registrar",
-                roomORwindow: "Window 7",
-                registrationDate: "October 23-24, 2025",
-                stream: "Business",
-                dormBuilding: "Block-15",
-                dormRoom: "3",
-                dormBed: "1"
-            },
-            "8475663": {
-                admissionNumber: "8475663",
-                studentId: "JJUUGRE181567",
-                name: "Mohammed Omar Hassan",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 7",
-                registrationDate: "October 23-24, 2025",
-                stream: "Business",
-                dormBuilding: "Block-25",
-                dormRoom: "4",
-                dormBed: "2"
-            },
-            "8475664": {
-                admissionNumber: "8475664",
-                studentId: "JJUUGRE181568",
-                name: "Hassan Abdi Mohamed",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 7",
-                registrationDate: "October 23-24, 2025",
-                stream: "Business",
-                dormBuilding: "Block-25",
-                dormRoom: "4",
-                dormBed: "3"
-            },
-            "8475665": {
-                admissionNumber: "8475665",
-                studentId: "JJUUGRE181569",
-                name: "Safia Abdullahi Omar",
-                gender: "Female",
-                building: "Main Registrar",
-                roomORwindow: "Window 8",
-                registrationDate: "October 23-24, 2025",
-                stream: "Health Science",
-                dormBuilding: "Block-15",
-                dormRoom: "3",
-                dormBed: "2"
-            },
-            "8475666": {
-                admissionNumber: "8475666",
-                studentId: "JJUUGRE181570",
-                name: "Yusuf Ali Mohamud",
-                gender: "Male",
-                building: "Main Registrar",
-                roomORwindow: "Window 8",
-                registrationDate: "October 23-24, 2025",
-                stream: "Health Science",
-                dormBuilding: "Block-25",
-                dormRoom: "5",
-                dormBed: "1"
-            }
-        };
-
         // Set current year for copyright
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
@@ -1039,7 +858,7 @@
         });
 
         async function searchStudent() {
-            const input = document.getElementById('usernameInput').value.trim();
+            const input = document.getElementById('usernameInput').value.trim().toUpperCase();
             const resultDiv = document.getElementById('result');
             const dormitoryInfo = document.getElementById('dormitory-info');
             const loadingIndicator = document.getElementById('loadingIndicator');
@@ -1050,7 +869,7 @@
             dormitoryInfo.style.display = 'none';
             
             if (!input) {
-                resultDiv.innerHTML = `<p class="red">Please enter admission number to search.</p>`;
+                resultDiv.innerHTML = `<div class="error">Please enter admission number to search.</div>`;
                 return;
             }
             
@@ -1059,15 +878,58 @@
             searchButton.disabled = true;
             searchButton.textContent = 'Searching...';
             
-            // Simulate loading delay for better UX
-            await new Promise(resolve => setTimeout(resolve, 800));
-            
             try {
-                // Search in the database
-                const studentFound = studentDatabase[input];
+                // Fetch the CSV file
+                const response = await fetch('fresh_data.csv');
                 
+                if (!response.ok) {
+                    throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                
+                // Parse CSV data and find the specific student
+                const lines = csvText.trim().split('\n');
+                let studentFound = null;
+                
+                // Search for the student with the matching username
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        // Try different delimiters
+                        let fields;
+                        if (line.includes('\t')) {
+                            fields = line.split('\t');
+                        } else if (line.includes(',')) {
+                            fields = line.split(',');
+                        } else {
+                            fields = line.split(/\s+/);
+                        }
+                        
+                        // Check if this is the student we're looking for
+                        if (fields.length >= 2 && fields[0].trim().toUpperCase() === input) {
+                            studentFound = {
+                                admissionNumber: fields[0] ? fields[0].trim() : 'Unknown',
+                                studentId: fields[1] ? fields[1].trim() : 'Unknown',
+                                name: fields[2] ? fields[2].trim() : 'Not specified',
+                                gender: fields[3] ? fields[3].trim() : 'Not specified',
+                                building: fields[4] ? fields[4].trim() : 'Not specified',
+                                roomORwindow: fields[5] ? fields[5].trim() : 'Not specified',
+                                registrationDate: fields[6] ? fields[6].trim() : 'Not specified',
+                                stream: fields[7] ? fields[7].trim() : 'Not specified',
+                                dormBuilding: fields[8] ? fields[8].trim() : 'Not assigned',
+                                dormRoom: fields[9] ? fields[9].trim() : 'Not assigned',
+                                dormBed: fields[10] ? fields[10].trim() : 'Not assigned'
+                            };
+                            break; // Stop searching once we found the student
+                        }
+                    }
+                }
+                
+                // Display results
                 if (studentFound) {
                     resultDiv.innerHTML = `
+                        <div class="success">Student found! Here are your registration details:</div>
                         <div class="result-item"><span class="field-label">Student Name:</span> ${studentFound.name}</div>
                         <div class="result-item"><span class="field-label">Student ID:</span> ${studentFound.studentId}</div>
                         <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
@@ -1085,12 +947,18 @@
                         dormitoryInfo.style.display = 'block';
                     }
                 } else {
-                    resultDiv.innerHTML = `<p class="red">No student found with admission number: ${input}</p>`;
+                    resultDiv.innerHTML = `<div class="error">No student found with admission number: ${input}</div>`;
                 }
                 
             } catch (error) {
                 console.error('Error searching for student:', error);
-                resultDiv.innerHTML = `<p class="red">Error searching for student. Please try again.</p>`;
+                resultDiv.innerHTML = `<div class="error">Error loading student data: ${error.message}. Please check if fresh_data.csv exists.</div>`;
+                
+                // Provide helpful debugging information
+                console.log('Make sure:');
+                console.log('1. fresh_data.csv is in the same folder as this HTML file');
+                console.log('2. The CSV file has the correct tab-delimited format');
+                console.log('3. The server allows file access');
             } finally {
                 // Hide loading indicator and re-enable button
                 loadingIndicator.style.display = 'none';
@@ -1111,10 +979,6 @@
             document.getElementById('usernameInput').focus();
         });
 
-        // Add click sound effect for better UX
-        document.getElementById('searchButton').addEventListener('click', function() {
-            // You can add a subtle click sound here if desired
-        });
     </script>
 </body>
 </html>
