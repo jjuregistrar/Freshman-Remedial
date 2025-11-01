@@ -862,31 +862,31 @@
             
             try {
                 // Fetch the CSV file
-                const response = await fetch('data.csv');
-                
+                const response = await fetch('fresh_data.csv');
+    
                 if (!response.ok) {
                     throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
                 }
-                
+    
                 const csvText = await response.text();
-                
+    
                 // Parse CSV data and find the specific student
                 const lines = csvText.trim().split('\n');
                 let studentFound = null;
-                
+    
                 // Search for the student with the matching username
                 for (let i = 1; i < lines.length; i++) {
-                    const line = lines[i].trim();
-                    if (line) {
-                        // Try different delimiters
-                        let fields;
-                        if (line.includes('\t')) {
-                            fields = line.split('\t');
-                        } else if (line.includes('\t')) {
-                            fields = line.split('\t');
-                        } else {
-                            fields = line.split(/\s+/);
-                        }
+                const line = lines[i].trim();
+                if (line) {
+                    // Use ONLY tab as delimiter (not comma or whitespace)
+                    let fields;
+                    if (line.includes('\t')) {
+                        fields = line.split('\t');
+                    } else {
+                        // If no tabs found, show error or try another approach
+                        console.warn('No tab delimiter found in line:', line);
+                        continue;
+                    }
                         
                         // Check if this is the student we're looking for
                         if (fields.length >= 2 && fields[0].trim().toUpperCase() === input) {
