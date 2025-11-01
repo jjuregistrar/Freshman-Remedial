@@ -900,8 +900,8 @@
                         let fields;
                         if (line.includes('\t')) {
                             fields = line.split('\t');
-                        } else if (line.includes(',')) {
-                            fields = line.split(',');
+                        } else if (line.includes('\t')) {
+                            fields = line.split('\t');
                         } else {
                             fields = line.split(/\s+/);
                         }
@@ -978,6 +978,7 @@
         window.addEventListener('load', function() {
             document.getElementById('usernameInput').focus();
         });
+
 
     </script>
 </body>
