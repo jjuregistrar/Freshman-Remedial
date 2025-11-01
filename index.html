@@ -878,33 +878,32 @@
             searchButton.disabled = true;
             searchButton.textContent = 'Searching...';
             
-            try {
-                // Fetch the CSV file
-                const response = await fetch('fresh_data.csv');
+    try {
+        // Fetch the CSV file
+        const response = await fetch('fresh_data.csv');
+        
+        if (!response.ok) {
+            throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
+        }
+        
+        const csvText = await response.text();
+        console.log('CSV loaded successfully'); // Debug log
+        
+        // Parse CSV data and find the specific student
+        const lines = csvText.trim().split('\n');
+        console.log('Total lines:', lines.length); // Debug log
+        
+        let studentFound = null;
+        
+        // Search for the student with the matching username
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (line) {
+                // Use ONLY tab as delimiter
+                const fields = line.split('\t');
                 
-                if (!response.ok) {
-                    throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
-                }
-                
-                const csvText = await response.text();
-                
-                // Parse CSV data and find the specific student
-                const lines = csvText.trim().split('\n');
-                let studentFound = null;
-                
-                // Search for the student with the matching username
-                for (let i = 1; i < lines.length; i++) {
-                    const line = lines[i].trim();
-                    if (line) {
-                        // Try different delimiters
-                        let fields;
-                        if (line.includes('\t')) {
-                            fields = line.split('\t');
-                        } else if (line.includes('\t')) {
-                            fields = line.split('\t');
-                        } else {
-                            fields = line.split(/\s+/);
-                        }
+
+                console.log('Processing line:', fields); // Debug log
                         
                         // Check if this is the student we're looking for
                         if (fields.length >= 2 && fields[0].trim().toUpperCase() === input) {
