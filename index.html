@@ -880,7 +880,13 @@
                     if (line) {
                         // Try different delimiters
                         let fields;
-                        if (line.includes(','))
+                        if (line.includes('\t')) {
+                            fields = line.split('\t');
+                        } else if (line.includes('\t')) {
+                            fields = line.split('\t');
+                        } else {
+                            fields = line.split(/\s+/);
+                        }
                         
                         // Check if this is the student we're looking for
                         if (fields.length >= 2 && fields[0].trim().toUpperCase() === input) {
