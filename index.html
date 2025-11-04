@@ -870,49 +870,43 @@
                 
                 const csvText = await response.text();
                 
-// Parse CSV data correctly using commas
-const lines = csvText.trim().split('\n');
-let studentFound = null;
-
-// Get headers from the first line
-const headers = lines[0].split(',').map(h => h.trim().toUpperCase());
-
-// Find column indexes
-const colIndex = {
-    admission: headers.indexOf('ADMISSIONNUMBER'),
-    studentId: headers.indexOf('STUDENTID'),
-    name: headers.indexOf('NAME'),
-    gender: headers.indexOf('GENDER'),
-    building: headers.indexOf('BUILDING'),
-    roomWindow: headers.indexOf('WINDOW'),
-    regDate: headers.indexOf('REGISTRATIONDATE'),
-    stream: headers.indexOf('STREAM'),
-    dormBuilding: headers.indexOf('DORMBUILDING'),
-    dormRoom: headers.indexOf('DORMROOM'),
-    dormBed: headers.indexOf('DORMBED')
-};
-
-// Loop through rows and find the matching student
-for (let i = 1; i < lines.length; i++) {
-    const row = lines[i].split(',').map(x => x.trim());
-    const admissionNum = row[colIndex.admission]?.toUpperCase();
-    if (admissionNum === input) {
-        studentFound = {
-            admissionNumber: row[colIndex.admission] || 'Unknown',
-            studentId: row[colIndex.studentId] || 'Unknown',
-            name: row[colIndex.name] || 'Not specified',
-            gender: row[colIndex.gender] || 'Not specified',
-            building: row[colIndex.building] || 'Not specified',
-            roomORwindow: row[colIndex.roomWindow] || 'Not specified',
-            registrationDate: row[colIndex.regDate] || 'Not specified',
-            stream: row[colIndex.stream] || 'Not specified',
-            dormBuilding: row[colIndex.dormBuilding] || 'Not assigned',
-            dormRoom: row[colIndex.dormRoom] || 'Not assigned',
-            dormBed: row[colIndex.dormBed] || 'Not assigned'
-        };
-        break;
-    }
-}
+                // Parse CSV data and find the specific student
+                const lines = csvText.trim().split('\n');
+                let studentFound = null;
+                
+                // Search for the student with the matching username
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        // Try different delimiters
+                        let fields;
+                        if (line.includes('\t')) {
+                            fields = line.split('\t');
+                        } else if (line.includes('\t')) {
+                            fields = line.split('\t');
+                        } else {
+                            fields = line.split(/\s+/);
+                        }
+                        
+                        // Check if this is the student we're looking for
+                        if (fields.length >= 2 && fields[0].trim().toUpperCase() === input) {
+                            studentFound = {
+                                admissionNumber: fields[0] ? fields[0].trim() : 'Unknown',
+                                studentId: fields[1] ? fields[1].trim() : 'Unknown',
+                                name: fields[2] ? fields[2].trim() : 'Not specified',
+                                gender: fields[3] ? fields[3].trim() : 'Not specified',
+                                building: fields[4] ? fields[4].trim() : 'Not specified',
+                                roomORwindow: fields[5] ? fields[5].trim() : 'Not specified',
+                                registrationDate: fields[6] ? fields[6].trim() : 'Not specified',
+                                stream: fields[7] ? fields[7].trim() : 'Not specified',
+                                dormBuilding: fields[8] ? fields[8].trim() : 'Not assigned',
+                                dormRoom: fields[9] ? fields[9].trim() : 'Not assigned',
+                                dormBed: fields[10] ? fields[10].trim() : 'Not assigned'
+                            };
+                            break; // Stop searching once we found the student
+                        }
+                    }
+                }
                 
                 // Display results
                 if (studentFound) {
