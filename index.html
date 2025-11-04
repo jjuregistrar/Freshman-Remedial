@@ -821,104 +821,210 @@
     </footer>
 
     <script>
-async function searchStudent() {
-    const input = document.getElementById('usernameInput').value.trim().toUpperCase();
-    const resultDiv = document.getElementById('result');
-    const dormitoryInfo = document.getElementById('dormitory-info');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    const searchButton = document.getElementById('searchButton');
+        // Set current year for copyright
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-    resultDiv.innerHTML = '';
-    dormitoryInfo.style.display = 'none';
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
 
-    if (!input) {
-        resultDiv.innerHTML = `<p class="red">Please enter admission number to search.</p>`;
-        return;
-    }
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('nav') && !event.target.closest('.mobile-menu-btn')) {
+                navMenu.classList.remove('active');
+            }
+        });
 
-    loadingIndicator.style.display = 'block';
-    searchButton.disabled = true;
-    searchButton.textContent = 'Searching...';
-
-    try {
-        // Try fetching TSV first, then CSV
-        let response;
-        try {
-            response = await fetch('fresh_data.tsv');
-            if (!response.ok) throw new Error('No TSV file found');
-        } catch {
-            response = await fetch('fresh_data.csv');
-        }
-
-        if (!response.ok) {
-            throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
-        }
-
-        const text = await response.text();
-
-        // Detect delimiter automatically
-        const firstLine = text.split('\n')[0];
-        const delimiter = firstLine.includes('\t') ? '\t' : ',';
-
-        // Parse file using the correct delimiter
-        const lines = text.trim().split('\n').map(line => line.split(delimiter).map(x => x.trim()));
-        const headers = lines[0].map(h => h.trim().toUpperCase());
-
-        // Column mapping
-        const col = (name) => headers.indexOf(name.toUpperCase());
-
-        let studentFound = null;
-        for (let i = 1; i < lines.length; i++) {
-            const row = lines[i];
-            const admissionNum = row[col('ADMISSIONNUMBER')]?.toUpperCase();
-            if (admissionNum === input) {
-                studentFound = {
-                    admissionNumber: row[col('ADMISSIONNUMBER')] || 'Unknown',
-                    studentId: row[col('STUDENTID')] || 'Unknown',
-                    name: row[col('NAME')] || 'Not specified',
-                    gender: row[col('GENDER')] || 'Not specified',
-                    stream: row[col('STREAM')] || 'Not specified',
-                    building: row[col('BUILDING')] || 'Not specified',
-                    roomORwindow: row[col('WINDOW')] || 'Not specified',
-                    registrationDate: row[col('REGISTRATIONDATE')] || 'Not specified',
-                    dormBuilding: row[col('DORMBUILDING')] || 'Not assigned',
-                    dormRoom: row[col('DORMROOM')] || 'Not assigned',
-                    dormBed: row[col('DORMBED')] || 'Not assigned'
-                };
-                break;
+        async function searchStudent() {
+            const input = document.getElementById('usernameInput').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('result');
+            const dormitoryInfo = document.getElementById('dormitory-info');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const searchButton = document.getElementById('searchButton');
+            
+            // Clear previous results and hide dormitory info
+            resultDiv.innerHTML = '';
+            dormitoryInfo.style.display = 'none';
+            
+            if (!input) {
+                resultDiv.innerHTML = `<p class="red">Please enter admission number to search.</p>`;
+                return;
+            }
+            
+            // Show loading indicator and disable button
+            loadingIndicator.style.display = 'block';
+            searchButton.disabled = true;
+            searchButton.textContent = 'Searching...';
+            
+            try {
+                // Fetch the CSV file
+                const response = await fetch('data.csv');
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                
+                // Parse CSV data and find the specific student
+                const lines = csvText.trim().split('\n');
+                let studentFound = null;
+                
+                // Search for the student with the matching username
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        // Try different delimiters
+                        let fields;
+                        if (line.includes('\t')) {
+                            fields = line.split('\t');
+                        } else if (line.includes('\t')) {
+                            fields = line.split('\t');
+                        } else {
+                            fields = line.split(/\s+/);
+                        }
+                        
+                        // Check if this is the student we're looking for
+                        if (fields.length >= 2 && fields[0].trim().toUpperCase() === input) {
+                            studentFound = {
+                                admissionNumber: fields[0] ? fields[0].trim() : 'Unknown',
+                                studentId: fields[1] ? fields[1].trim() : 'Unknown',
+                                name: fields[2] ? fields[2].trim() : 'Not specified',
+                                gender: fields[3] ? fields[3].trim() : 'Not specified',
+                                building: fields[4] ? fields[4].trim() : 'Not specified',
+                                roomORwindow: fields[5] ? fields[5].trim() : 'Not specified',
+                                registrationDate: fields[6] ? fields[6].trim() : 'Not specified',
+                                stream: fields[7] ? fields[7].trim() : 'Not specified',
+                                dormBuilding: fields[8] ? fields[8].trim() : 'Not assigned',
+                                dormRoom: fields[9] ? fields[9].trim() : 'Not assigned',
+                                dormBed: fields[10] ? fields[10].trim() : 'Not assigned'
+                            };
+                            break; // Stop searching once we found the student
+                        }
+                    }
+                }
+                
+                // Display results
+                if (studentFound) {
+                    resultDiv.innerHTML = `
+                        <div class="result-item"><span class="field-label">Student Name:</span> ${studentFound.name}</div>
+                        <div class="result-item"><span class="field-label">Student ID:</span> ${studentFound.studentId}</div>
+                        <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
+                        <div class="result-item"><span class="field-label">Stream:</span> ${studentFound.stream}</div>
+                        <div class="result-item"><span class="field-label">Registration Building:</span> ${studentFound.building}</div>
+                        <div class="result-item"><span class="field-label">Registration Window:</span> ${studentFound.roomORwindow}</div>
+                        <div class="result-item"><span class="field-label">Registration Date:</span> ${studentFound.registrationDate}</div>
+                    `;
+                    
+                    // Display dormitory information if available
+                    if (studentFound.dormBuilding && studentFound.dormBuilding !== 'Not assigned') {
+                        document.getElementById('dorm-building').textContent = studentFound.dormBuilding;
+                        document.getElementById('dorm-room').textContent = studentFound.dormRoom;
+                        document.getElementById('dorm-bed').textContent = studentFound.dormBed;
+                        dormitoryInfo.style.display = 'block';
+                    }
+                } else {
+                    resultDiv.innerHTML = `<p class="red">No student found with admission number: ${input}</p>`;
+                }
+                
+            } catch (error) {
+                console.error('Error searching for student:', error);
+                resultDiv.innerHTML = `<p class="red">Error searching for student: ${error.message}</p>`;
+                
+                // Fallback to sample data if CSV loading fails
+                const sampleStudent = getSampleStudent(input);
+                if (sampleStudent) {
+                    resultDiv.innerHTML = `
+                        <div class="result-item"><span class="field-label">Student Name:</span> ${sampleStudent.name}</div>
+                        <div class="result-item"><span class="field-label">Student ID:</span> ${sampleStudent.studentId}</div>
+                        <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                        <div class="result-item"><span class="field-label">Stream:</span> ${sampleStudent.stream}</div>
+                        <div class="result-item"><span class="field-label">Registration Building:</span> ${sampleStudent.building}</div>
+                        <div class="result-item"><span class="field-label">Registration Window:</span> ${sampleStudent.roomORwindow}</div>
+                        <div class="result-item"><span class="field-label">Registration Date:</span> ${sampleStudent.registrationDate}</div>
+                        <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
+                    `;
+                    
+                    // Display dormitory information for sample data
+                    if (sampleStudent.dormBuilding && sampleStudent.dormBuilding !== 'Not assigned') {
+                        document.getElementById('dorm-building').textContent = sampleStudent.dormBuilding;
+                        document.getElementById('dorm-room').textContent = sampleStudent.dormRoom;
+                        document.getElementById('dorm-bed').textContent = sampleStudent.dormBed;
+                        dormitoryInfo.style.display = 'block';
+                    }
+                } else {
+                    resultDiv.innerHTML = `<p class="red">No student found with admission number: ${input}</p>`;
+                }
+            } finally {
+                // Hide loading indicator and re-enable button
+                loadingIndicator.style.display = 'none';
+                searchButton.disabled = false;
+                searchButton.textContent = 'Search';
             }
         }
 
-        if (studentFound) {
-            resultDiv.innerHTML = `
-                <div class="result-item"><span class="field-label">Student Name:</span> ${studentFound.name}</div>
-                <div class="result-item"><span class="field-label">Student ID:</span> ${studentFound.studentId}</div>
-                <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
-                <div class="result-item"><span class="field-label">Stream:</span> ${studentFound.stream}</div>
-                <div class="result-item"><span class="field-label">Registration Building:</span> ${studentFound.building}</div>
-                <div class="result-item"><span class="field-label">Registration Window:</span> ${studentFound.roomORwindow}</div>
-                <div class="result-item"><span class="field-label">Registration Date:</span> ${studentFound.registrationDate}</div>
-            `;
-
-            if (studentFound.dormBuilding && studentFound.dormBuilding !== 'Not assigned') {
-                document.getElementById('dorm-building').textContent = studentFound.dormBuilding;
-                document.getElementById('dorm-room').textContent = studentFound.dormRoom;
-                document.getElementById('dorm-bed').textContent = studentFound.dormBed;
-                dormitoryInfo.style.display = 'block';
-            }
-        } else {
-            resultDiv.innerHTML = `<p class="red">No student found with admission number: ${input}</p>`;
+        // Fallback function with sample data
+        function getSampleStudent(admissionNumber) {
+            const sampleData = {
+                "NGAT00000018": {
+                    admissionNumber: "NGAT00000018",
+                    studentId: "NGAT00000018",
+                    name: "Ahmed Mohammed",
+                    gender: "Male",
+                    registrationDate: "October 23-24, 2025",
+                    building: "Science Building",
+                    roomORwindow: "Window 1",
+                    stream: "Natural Science",
+                    dormBuilding: "Male Dormitory A",
+                    dormRoom: "Room 205",
+                    dormBed: "Bed 3"
+                },
+                "NGAT00000019": {
+                    admissionNumber: "NGAT00000019",
+                    studentId: "NGAT00000019",
+                    name: "Sadam Dawud",
+                    gender: "Male",
+                    registrationDate: "October 23-24, 2025",
+                    building: "Science Building",
+                    roomORwindow: "Window 2",
+                    stream: "Social Science",
+                    dormBuilding: "Male Dormitory B",
+                    dormRoom: "Room 312",
+                    dormBed: "Bed 1"
+                },
+                "NGAT00000020": {
+                    admissionNumber: "NGAT00000020",
+                    studentId: "NGAT00000020",
+                    name: "Soreti Siraj",
+                    gender: "Female",
+                    registrationDate: "October 23-24, 2025",
+                    building: "Science Building",
+                    roomORwindow: "Window 3",
+                    stream: "Natural Science",
+                    dormBuilding: "Female Dormitory C",
+                    dormRoom: "Room 108",
+                    dormBed: "Bed 2"
+                }
+            };
+            
+            return sampleData[admissionNumber] || null;
         }
-    } catch (error) {
-        resultDiv.innerHTML = `<p class="red">Error searching for student: ${error.message}</p>`;
-    } finally {
-        loadingIndicator.style.display = 'none';
-        searchButton.disabled = false;
-        searchButton.textContent = 'Search';
-    }
-}
-</script>
 
-    
+        // Allow searching by pressing Enter key
+        document.getElementById('usernameInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchStudent();
+            }
+        });
+
+        // Auto-focus on the input field when page loads
+        window.addEventListener('load', function() {
+            document.getElementById('usernameInput').focus();
+        });
+    </script>
 </body>
 </html>
