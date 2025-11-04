@@ -879,7 +879,7 @@ for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
     if (line) {
         // Simple comma splitting (use this if no commas inside quoted fields)
-        const fields = line.split(',');
+        const fields = line.split('\t');
         
         // Check if this is the student we're looking for
         if (fields.length >= 2 && fields[0].trim().toUpperCase() === input) {
